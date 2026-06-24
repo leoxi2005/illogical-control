@@ -106,9 +106,37 @@ Native addon NDI phải compile riêng cho từng OS — **không thể cross-bu
 - Kiểm tra Node arm64 (không phải Node x64 qua Rosetta): `node -p process.arch` phải ra `arm64`.
 - Nếu `node-gyp` lỗi Python: cần Python 3 trong PATH.
 
-### TouchDesigner không thấy source
-- 2 máy phải cùng mạng/localhost; NDI discovery đôi khi cần tắt firewall hoặc bật NDI Discovery Service.
-- Trên cùng 1 máy: source vẫn hiện trong `NDI In TOP` (chọn theo tên).
+### TouchDesigner không thấy source (Source Name trống) — QUAN TRỌNG
+
+App phát đúng nhưng `NDI In TOP` không hiện source là chuyện hay gặp. Làm theo thứ tự:
+
+**1. Bấm vào ô `Source Name` — nó là MENU xổ xuống, không phải gõ sẵn.**
+Bấm vào (hoặc mũi tên phải) → chọn `… (IllogicalFloor)` / `… (IllogicalTimer)`.
+
+**2. Menu trống → nhấp nháy discovery:** gạt `Active` Off → On một lần để TD quét lại.
+
+**3. Vẫn trống → điền `Extra Search IPs` rồi Active Off→On.**
+Đây là cách ép TD tìm theo IP, gần như luôn ăn:
+- **TD chạy CÙNG máy với app** (kịch bản chạy sự kiện trên Mac): điền `127.0.0.1`
+- **TD chạy MÁY KHÁC cùng mạng** (vd app trên Mac, TD trên Windows): điền **IP LAN của máy chạy app**.
+
+**4. Gõ tay tên source** (chắc ăn vì tên cố định): bấm `Source Name` và gõ
+`TÊN-MÁY.LOCAL (IllogicalFloor)` — ví dụ `MACBOOK-PRO-CUA-MACOS-2.LOCAL (IllogicalFloor)`.
+
+**5. Firewall** (nếu mạng LAN giữa 2 máy):
+- *macOS:* System Settings → Network → Firewall → tắt tạm, hoặc Options… cho phép **Illogical Control** + **TouchDesigner** nhận kết nối.
+- *Windows:* lần đầu mở app, Windows Defender Firewall hỏi → tick cả **Private** và **Public** rồi Allow. Bị lỡ thì: Control Panel → Windows Defender Firewall → Allow an app → thêm app + TD.
+
+#### Cách tìm IP LAN của máy chạy app
+- **macOS:** System Settings → Wi-Fi → Details → *IP Address*. Hoặc Terminal: `ipconfig getifaddr en0`
+- **Windows:** `ipconfig` trong CMD → dòng *IPv4 Address* của card đang dùng (vd `192.168.1.x`).
+
+> ⚠️ **IP LAN đổi khi reconnect Wi-Fi/router.** Chạy sự kiện thì nên:
+> - Ưu tiên **chạy app + TD trên cùng 1 máy Mac** → dùng `127.0.0.1`, không lo IP đổi. (Đây là kịch bản sự kiện của bạn.)
+> - Nếu buộc dùng 2 máy: đặt **DHCP reservation** trên router để máy chạy app giữ nguyên IP, hoặc set IP tĩnh.
+
+#### Port NDI
+App mở các cổng chuẩn NDI (`5960`, `5962`, `5963`…). Nếu chạy 2 máy mà có switch/AP chặn, đảm bảo các cổng này + mDNS (UDP `5353`) không bị chặn.
 
 ## 6. Cấu trúc dự án
 
