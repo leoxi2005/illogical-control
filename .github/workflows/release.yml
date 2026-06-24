@@ -21,8 +21,8 @@ jobs:
         include:
           - os: macos-14          # Apple Silicon (arm64) → matches M-series Macs
             platform: mac
-          - os: windows-latest    # x64 → standard Windows .exe
-            platform: win
+          - os: windows-2022      # x64; has VS 2022 that node-gyp 9.x recognises
+            platform: win          # (windows-latest ships VS18, too new for this node-gyp)
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
