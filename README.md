@@ -14,14 +14,14 @@ Chỉ scene đang **active** (đang xem ở sidebar) mới nhận phím — trá
 ## 1. Yêu cầu hệ thống
 
 - **macOS** (Apple Silicon hỗ trợ tốt) hoặc Windows.
-- **NDI runtime** đã cài trên máy. Bạn đã có qua **DistroAV** (plugin OBS) là đủ — NDI runtime nằm chung. Nếu chưa: cài NDI Tools / NDI Runtime của NewTek/Vizrt.
-- **Node.js 18+** (arm64 trên Apple Silicon) và npm.
-- Xcode Command Line Tools (macOS) để compile native addon NDI:
+- ✅ **KHÔNG cần cài NDI Tools / NDI Runtime.** Thư viện NDI (`libndi.dylib` trên Mac, `Processing.NDI.Lib.x64.dll` trên Windows) được **nhúng thẳng vào app** lúc build — app tự phát NDI được. (TouchDesigner đã có sẵn NDI để nhận.)
+- **Node.js 18+** (arm64 trên Apple Silicon) và npm — chỉ cần khi **build từ source**. Dùng file `.app`/`.exe` đã build thì không cần gì.
+- Để build từ source: Xcode Command Line Tools (macOS) hoặc Build Tools/Python (Windows) để compile native addon:
   ```bash
-  xcode-select --install
+  xcode-select --install   # macOS
   ```
 
-> NDI binding dùng là **`@stagetimerio/grandiose`** — addon **N-API**, nên binary biên dịch một lần là chạy được trên cả Node lẫn Electron (không cần `electron-rebuild` như các binding cũ). Đây là lý do chọn nó thay cho `grandiose` gốc (kẹt ở 0.0.x, khó build trên Apple Silicon).
+> NDI binding dùng là **`@stagetimerio/grandiose`** — addon **N-API**, biên dịch một lần chạy được cả Node lẫn Electron (không cần `electron-rebuild`). Lúc cài, nó **tự tải NDI SDK** và copy thư viện NDI nằm cạnh addon → khi đóng gói (`asarUnpack`) thư viện đi kèm app, nên máy đích không phải cài NDI Tools.
 
 ## 2. Cài đặt
 
@@ -76,7 +76,7 @@ Kết quả nằm trong `release/`:
 
 ### Windows (.exe) — ⚠️ BẮT BUỘC build TRÊN máy Windows
 Native addon NDI phải compile riêng cho từng OS — **không thể cross-build từ Mac sang Windows**. Khi qua máy Windows:
-1. Cài Node.js (LTS) + cài **NDI runtime** (NDI Tools).
+1. Cài Node.js (LTS). *(KHÔNG cần cài NDI Tools — driver NDI được nhúng vào .exe lúc build.)*
 2. Copy **source** sang (KHÔNG copy `node_modules` của Mac). Tránh đường dẫn có dấu cách.
 3. Trong thư mục project:
    ```bash
@@ -99,8 +99,7 @@ Native addon NDI phải compile riêng cho từng OS — **không thể cross-bu
   ```bash
   npx electron-rebuild -f -w @stagetimerio/grandiose
   ```
-- Đảm bảo **NDI runtime** đã cài (DistroAV/NDI Tools) — cần lúc chạy.
-- macOS: nếu báo thiếu `libndi.dylib`, cài lại NDI Runtime; có thể cần `DYLD_LIBRARY_PATH` trỏ tới thư mục NDI lib.
+- Thư viện NDI **đã nhúng sẵn** trong app (không cần NDI Tools). Nếu báo thiếu lib: build lại cho đúng OS đang chạy (`npm install` + `npm run build:mac`/`build:win` trên chính máy đó), và đảm bảo path không có dấu cách.
 
 ### Build fail trên Apple Silicon
 - Cài Xcode CLT (`xcode-select --install`).
