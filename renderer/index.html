@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Illogical Control</title>
+<style>
+  :root{--bg:#05070a;--panel:#0b0e16;--line:#1a2030;--ink:#c9d4e8;--dim:#5d6a82;
+    --green:#00ff5a;--warm:#ffcaa0;--hot:#ff2e6e;--cyan:#39d0ff;}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;overflow:hidden}
+  .app{display:grid;grid-template-columns:240px 1fr;height:100vh}
+
+  /* sidebar */
+  .sidebar{border-right:1px solid var(--line);background:var(--panel);padding:14px;
+    display:flex;flex-direction:column;gap:10px;overflow:auto}
+  .brand{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+  .brand small{display:block;color:var(--dim);font-size:10px;letter-spacing:.16em;margin-top:4px}
+  #sidebar{display:flex;flex-direction:column;gap:10px;flex:1;min-height:0}
+  .tab{border:1px solid var(--line);border-radius:5px;padding:10px;cursor:pointer;background:#070a12;transition:.15s}
+  .tab:hover{border-color:#2a3550}
+  .tab.active{border-color:var(--green)}
+  .tab-title{font-size:13px;color:#fff;letter-spacing:.08em}
+  .tab-sub{font-size:10px;color:var(--dim);letter-spacing:.06em;margin-top:3px}
+  .tab-row{display:flex;align-items:center;gap:8px;margin-top:9px}
+  .dot{width:9px;height:9px;border-radius:50%;background:#33405a;flex:0 0 auto}
+  .dot.on{background:var(--green);box-shadow:0 0 8px var(--green)}
+  .ndi-btn{flex:1;font-family:inherit;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+    background:#0d1322;border:1px solid var(--line);color:var(--ink);padding:6px;border-radius:3px;cursor:pointer}
+  .ndi-btn:hover{border-color:var(--green);color:#fff}
+  .ndi-btn.on{border-color:var(--hot);color:var(--hot)}
+  .all-row{display:flex;gap:6px;margin-top:4px}
+  .all-row button{flex:1;font-family:inherit;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+    background:#0d1322;border:1px solid var(--line);color:var(--ink);padding:7px;border-radius:3px;cursor:pointer}
+  .all-row button:hover{border-color:var(--green);color:#fff}
+  .fps-row{display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:10px;border-top:1px solid var(--line)}
+  .fps-row label{font-size:10px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase}
+  .fps-row select{background:#06080d;border:1px solid var(--line);color:var(--ink);font-family:inherit;
+    font-size:12px;padding:5px 8px;border-radius:3px}
+
+  /* main */
+  .main{display:flex;flex-direction:column;min-width:0;padding:14px;gap:12px;overflow:auto}
+  .preview-box{flex:0 0 auto;height:46vh;min-height:200px;border:1px solid var(--line);background:#000;
+    border-radius:4px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  canvas#preview{display:block;background:#000}
+  .status{font-size:11px;color:var(--dim);letter-spacing:.04em;line-height:1.6;
+    border:1px solid var(--line);background:var(--panel);padding:9px 11px;border-radius:4px}
+  .status.err{color:var(--hot);border-color:var(--hot)}
+
+  /* control panel (built by controls.js) */
+  .controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:10px 16px;padding:14px;border:1px solid var(--line);background:var(--panel);border-radius:4px}
+  .ctl{display:flex;flex-direction:column;gap:5px}
+  label{font-size:10px;letter-spacing:.16em;color:var(--dim);text-transform:uppercase}
+  input[type=number],select,input[type=color],input[type=text]{background:#06080d;border:1px solid var(--line);
+    color:var(--ink);font-family:inherit;font-size:12px;padding:7px 8px;border-radius:3px;width:100%}
+  input[type=color]{height:34px;padding:2px}
+  input[type=range]{flex:1;accent-color:var(--green)}
+  .range-wrap{display:flex;align-items:center;gap:8px}
+  .range-val{font-size:11px;color:var(--ink);min-width:30px;text-align:right}
+  .actions{display:flex;gap:8px;flex-wrap:wrap;grid-column:1/-1;border-top:1px solid var(--line);padding-top:12px}
+  .actions button{font-family:inherit;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    background:#0d1322;border:1px solid var(--line);color:var(--ink);padding:9px 12px;border-radius:3px;cursor:pointer}
+  .actions button:hover{border-color:var(--green);color:#fff}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">Illogical Control<small>Day 2 · NDI Out → TouchDesigner</small></div>
+    <div id="sidebar"></div>
+  </aside>
+  <main class="main">
+    <div class="preview-box"><canvas id="preview"></canvas></div>
+    <div class="status" id="status">booting…</div>
+    <div id="panel"></div>
+  </main>
+</div>
+<script type="module" src="./app.js"></script>
+</body>
+</html>
