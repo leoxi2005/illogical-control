@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Illogical Control — Hướng dẫn</title>
+<style>
+  :root{
+    --bg:#05070a;--panel:#0b0e16;--panel2:#070a12;--line:#1a2030;--ink:#c9d4e8;--dim:#5d6a82;
+    --green:#00ff5a;--warm:#ffcaa0;--hot:#ff2e6e;--cyan:#39d0ff;--amber:#ffb84d;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;line-height:1.65}
+  a{color:var(--cyan);text-decoration:none;border-bottom:1px solid rgba(57,208,255,.3)}
+  a:hover{color:#fff;border-color:var(--cyan)}
+  .wrap{max-width:920px;margin:0 auto;padding:34px 20px 80px}
+
+  header{border:1px solid var(--line);background:linear-gradient(160deg,#0b0e16,#070a12);
+    border-radius:8px;padding:26px 26px 22px;margin-bottom:22px;position:relative;overflow:hidden}
+  header::after{content:"";position:absolute;inset:0;background:radial-gradient(600px 120px at 80% -20%,rgba(0,255,90,.10),transparent)}
+  h1{margin:0;font-size:24px;letter-spacing:.18em;text-transform:uppercase;color:#fff}
+  .tagline{color:var(--dim);font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin-top:8px}
+  .scenes{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .chip{border:1px solid var(--line);border-radius:20px;padding:6px 14px;font-size:12px;background:#06080d}
+  .chip b{color:var(--green)}
+
+  h2{font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:#fff;
+    margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+  h2 .n{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:6px;
+    background:rgba(0,255,90,.12);color:var(--green);font-size:12px;border:1px solid rgba(0,255,90,.3)}
+  h3{font-size:13px;letter-spacing:.08em;color:var(--warm);margin:20px 0 8px;text-transform:uppercase}
+
+  .card{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:18px 20px;margin:12px 0}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:680px){.grid2{grid-template-columns:1fr}}
+
+  .btn{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--line);background:#0d1322;
+    color:var(--ink);padding:14px 18px;border-radius:8px;font-size:13px;letter-spacing:.06em;
+    transition:.15s;width:100%;justify-content:space-between}
+  .btn:hover{border-color:var(--green);color:#fff;background:#0f1626}
+  .btn .ico{font-size:20px}
+  .btn small{display:block;color:var(--dim);font-size:11px;letter-spacing:.04em;margin-top:2px}
+
+  table{width:100%;border-collapse:collapse;margin:8px 0;font-size:13px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--dim);font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600}
+  td b{color:var(--green)}
+  kbd{display:inline-block;background:#06080d;border:1px solid var(--line);border-bottom-width:2px;
+    border-radius:4px;padding:1px 7px;font-size:12px;color:#fff;margin:0 1px}
+
+  code{color:var(--cyan);background:#06080d;border:1px solid var(--line);border-radius:4px;padding:1px 6px;font-size:12.5px}
+  pre{background:#06080d;border:1px solid var(--line);border-radius:8px;padding:14px 16px;overflow:auto;font-size:12.5px}
+  pre code{border:0;background:none;padding:0;color:var(--ink)}
+
+  ol,ul{margin:8px 0;padding-left:22px}
+  li{margin:6px 0}
+
+  .note{border-left:3px solid var(--cyan);background:rgba(57,208,255,.06);padding:12px 16px;border-radius:0 6px 6px 0;margin:12px 0}
+  .warn{border-left:3px solid var(--amber);background:rgba(255,184,77,.07);padding:12px 16px;border-radius:0 6px 6px 0;margin:12px 0}
+  .ok{border-left:3px solid var(--green);background:rgba(0,255,90,.06);padding:12px 16px;border-radius:0 6px 6px 0;margin:12px 0}
+  .star{border:1px solid rgba(0,255,90,.4);background:rgba(0,255,90,.05);border-radius:8px;padding:16px 18px;margin:14px 0}
+  .star h3{margin-top:0;color:var(--green)}
+
+  .kv{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:13px}
+  .kv span:nth-child(odd){color:var(--dim)}
+  .kv b{color:var(--green)}
+
+  footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--line);color:var(--dim);font-size:11.5px;letter-spacing:.06em;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Illogical Control</h1>
+    <div class="tagline">Day 2 · NDI Out → TouchDesigner · Hướng dẫn tổng hợp</div>
+    <div class="scenes">
+      <span class="chip"><b>Floor Spots</b> · IllogicalFloor · 3305×2561</span>
+      <span class="chip"><b>Bomb Timer</b> · IllogicalTimer · 8324×815</span>
+    </div>
+  </header>
+
+  <!-- LINKS -->
+  <h2><span class="n">1</span> Link &amp; Tải về</h2>
+  <div class="card">
+    <div class="kv" style="margin-bottom:16px">
+      <span>Repo GitHub</span><b><a href="https://github.com/leoxi2005/illogical-control">github.com/leoxi2005/illogical-control</a></b>
+      <span>Trang tải app</span><b><a href="https://github.com/leoxi2005/illogical-control/releases/tag/v1.0.0">Releases v1.0.0</a></b>
+    </div>
+    <div class="grid2">
+      <a class="btn" href="https://github.com/leoxi2005/illogical-control/releases/download/v1.0.0/Illogical.Control-1.0.0-arm64.dmg">
+        <span class="ico">🍎</span>
+        <span style="flex:1">macOS (Apple Silicon)<small>Illogical Control-1.0.0-arm64.dmg · 112MB</small></span>
+        <span>↓</span>
+      </a>
+      <a class="btn" href="https://github.com/leoxi2005/illogical-control/releases/download/v1.0.0/Illogical.Control.Setup.1.0.0.exe">
+        <span class="ico">🪟</span>
+        <span style="flex:1">Windows (x64)<small>Illogical Control Setup 1.0.0.exe · 89MB</small></span>
+        <span>↓</span>
+      </a>
+    </div>
+    <div class="ok" style="margin-top:14px">✅ Cả 2 bản <b>nhúng sẵn driver NDI</b> — cài xong bấm mở là chạy, <b>không cần cài NDI Tools</b>.</div>
+  </div>
+
+  <!-- INSTALL -->
+  <h2><span class="n">2</span> Cài đặt &amp; mở lần đầu</h2>
+  <div class="card">
+    <p>App chưa ký chứng chỉ trả phí (bình thường với app tự build) nên lần đầu hệ điều hành sẽ cảnh báo. Cách qua:</p>
+    <h3>🍎 macOS</h3>
+    <p>Mở file <code>.dmg</code> → kéo app vào <b>Applications</b>. Nếu bị chặn: <b>chuột phải vào app → Open → Open</b> (chỉ làm 1 lần đầu).</p>
+    <h3>🪟 Windows</h3>
+    <p>Bấm chạy file <code>.exe</code> để cài. Nếu hiện "Windows protected your PC": bấm <b>More info → Run anyway</b>. Lần đầu mở app, nếu Firewall hỏi → tick cả <b>Private</b> và <b>Public</b> rồi <b>Allow</b>.</p>
+  </div>
+
+  <!-- USE -->
+  <h2><span class="n">3</span> Dùng app</h2>
+  <div class="card">
+    <ol>
+      <li>Bên trái chọn scene (<b>Floor Spots</b> / <b>Bomb Timer</b>).</li>
+      <li>Bấm <b>Start NDI</b> ở scene đó (đèn xanh = đang phát), hoặc <b>Start All</b> phát cả 2.</li>
+      <li>Chọn <b>FPS</b> (30 mặc định / 60). Chỉnh thông số ở panel dưới.</li>
+      <li>Điều khiển bằng phím tắt — <b>chỉ scene đang xem mới nhận phím</b>.</li>
+    </ol>
+
+    <h3>⌨️ Phím tắt</h3>
+    <table>
+      <tr><th>Scene</th><th>Phím</th></tr>
+      <tr><td><b>Floor Spots</b></td>
+        <td><kbd>→</kbd>/<kbd>Space</kbd> bật spot tiếp · <kbd>←</kbd> lùi · <kbd>A</kbd> bật hết · <kbd>R</kbd> reset · <kbd>1</kbd>–<kbd>9</kbd> nhảy tới spot</td></tr>
+      <tr><td><b>Bomb Timer</b></td>
+        <td><kbd>Space</kbd> start/pause · <kbd>R</kbd> reset · <kbd>O</kbd> reveal "OPEN IT"</td></tr>
+    </table>
+  </div>
+
+  <!-- TD -->
+  <h2><span class="n">4</span> Nhận trong TouchDesigner</h2>
+  <div class="card">
+    <ol>
+      <li>Tạo <code>NDI In TOP</code> → ô <b>Source Name</b> chọn <code>… (IllogicalFloor)</code> → map ra <b>sàn</b>.</li>
+      <li>Tạo <code>NDI In TOP</code> thứ 2 → chọn <code>… (IllogicalTimer)</code> → map ra <b>tường</b>.</li>
+    </ol>
+
+    <div class="warn">
+      <b>Nếu ô Source Name TRỐNG (không thấy source):</b> làm theo thứ tự bên dưới — app phát đúng, chỉ là TD chưa "thấy".
+    </div>
+
+    <ol>
+      <li><b>Bấm vào ô <code>Source Name</code></b> — nó là <b>menu xổ xuống</b>, không phải gõ sẵn. Bấm để xem danh sách rồi chọn.</li>
+      <li>Menu trống → gạt <b>Active</b> <code>Off → On</code> để quét lại.</li>
+      <li>Vẫn trống → điền <b>Extra Search IPs</b> rồi Active Off→On:
+        <ul>
+          <li>TD <b>cùng máy</b> với app → <code>127.0.0.1</code></li>
+          <li>TD <b>máy khác</b> cùng mạng → IP LAN của máy chạy app</li>
+        </ul>
+      </li>
+      <li>Vẫn trống → bấm <code>Source Name</code> và <b>gõ tay</b> tên source, ví dụ:<br>
+        <code>MACBOOK-PRO-CUA-MACOS-2.LOCAL (IllogicalFloor)</code></li>
+      <li>Còn nữa → kiểm tra <b>Firewall</b> (mục dưới).</li>
+    </ol>
+  </div>
+
+  <!-- IP -->
+  <h2><span class="n">5</span> IP &amp; mạng</h2>
+  <div class="card">
+    <div class="kv" style="margin-bottom:14px">
+      <span>IP máy (LAN) hiện tại</span><b>192.168.1.5</b>
+      <span>Cùng máy (localhost)</span><b>127.0.0.1</b>
+      <span>Hostname</span><b>MacBook-Pro-cua-MacOs-2.local</b>
+      <span>Port NDI</span><b>5960, 5962, 5963 (+ mDNS UDP 5353)</b>
+    </div>
+
+    <h3>Tìm IP LAN của máy chạy app</h3>
+    <table>
+      <tr><th>Hệ</th><th>Cách lấy IP</th></tr>
+      <tr><td>🍎 macOS</td><td>System Settings → Wi-Fi → Details → <i>IP Address</i> · hoặc Terminal: <code>ipconfig getifaddr en0</code></td></tr>
+      <tr><td>🪟 Windows</td><td>CMD: <code>ipconfig</code> → dòng <i>IPv4 Address</i> của card đang dùng</td></tr>
+    </table>
+
+    <div class="warn">⚠️ <b>IP LAN đổi khi reconnect Wi-Fi/router.</b> Nếu mai mốt mất source, kiểm tra lại IP. Muốn cố định: đặt <b>DHCP reservation</b> trên router hoặc set IP tĩnh.</div>
+  </div>
+
+  <!-- EVENT -->
+  <h2><span class="n">6</span> Lưu ý chạy sự kiện</h2>
+  <div class="star">
+    <h3>★ Chạy sự kiện trên máy Mac (app + TD cùng 1 máy)</h3>
+    <ul>
+      <li>Trong <code>NDI In TOP</code> dùng <b>Extra Search IPs = <code>127.0.0.1</code></b> → ổn định nhất, <b>không lo IP đổi</b> khi đổi mạng ở venue.</li>
+      <li>Mỗi <code>NDI In TOP</code> set Output đúng res: sàn <b>3305×2561</b>, tường <b>8324×815</b>.</li>
+      <li>Nền đen tuyệt đối → comp <code>Add/Screen</code> nếu cần (Bomb Timer).</li>
+      <li>Phát 2 stream lớn khá nặng → giữ <b>FPS 30</b>, chỉ Start NDI scene đang dùng. Nếu giật, tắt bớt stream không cần.</li>
+      <li>Chỉ <b>scene đang active</b> nhận phím → trước khi bấm phím, click chọn đúng scene ở sidebar.</li>
+    </ul>
+  </div>
+
+  <h3>🔥 Firewall (khi chạy 2 máy qua LAN)</h3>
+  <div class="card">
+    <p><b>macOS:</b> System Settings → Network → Firewall → tắt tạm, hoặc Options… cho phép <b>Illogical Control</b> + <b>TouchDesigner</b> nhận kết nối.</p>
+    <p><b>Windows:</b> lần đầu mở app tick cả <b>Private + Public</b>. Lỡ rồi: Control Panel → Windows Defender Firewall → Allow an app → thêm app + TD.</p>
+  </div>
+
+  <!-- BUILD -->
+  <h2><span class="n">7</span> Build lại / ra bản mới (cho dev)</h2>
+  <div class="card">
+    <p>Sửa code trên Mac rồi push tag — GitHub Actions tự build cả 2 installer và đính vào Releases:</p>
+    <pre><code>cd /Users/macos/illogical-control
+git add -A &amp;&amp; git commit -m "mô tả thay đổi" &amp;&amp; git push
+git tag v1.0.1 &amp;&amp; git push origin v1.0.1</code></pre>
+    <div class="note">
+      Chạy từ source: <code>npm install</code> rồi <code>npm start</code>.<br>
+      ⚠️ Đường dẫn project <b>không được có dấu cách</b> (node-gyp sẽ fail). <code>.exe</code> Windows phải build trên máy Windows (hoặc để GitHub Actions lo).
+    </div>
+  </div>
+
+  <footer>
+    Illogical Playground · Day 2 · Illogical Control —
+    <a href="https://github.com/leoxi2005/illogical-control">github.com/leoxi2005/illogical-control</a>
+  </footer>
+
+</div>
+</body>
+</html>
